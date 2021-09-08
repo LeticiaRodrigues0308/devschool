@@ -285,11 +285,3 @@ table tr:nth-child(even) {
     background-color: #FFFFFF;
 }
 
-.icons {
-    display: flex;
-    flex-direction: row;
-}
-
-.editar img {
-    margin-right: 10px;
-}
