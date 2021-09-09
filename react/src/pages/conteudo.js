@@ -3,7 +3,15 @@ import { MatriculaInput } from "../components/outros/inputs"
 import { ConteudoSite } from "./conteudo.styled"
 import { IconesTabela, TabelaMatriculados } from "../components/outros/table"
 
+import Api from '../../service/api';
+const api = new Api();
+
 export default function Conteudo() {
+
+    const removerAluno = async (id) => {
+        const r = await api.apagarMatricula(id);
+    }
+
     return (
         <ConteudoSite>
             <div class="container">
@@ -66,7 +74,7 @@ export default function Conteudo() {
                 </div>
 
                         <TabelaMatriculados>
-
+                            
                         <thead>
                             <tr class="cabecalho-table">
                                 <th>ID</th>
@@ -90,7 +98,7 @@ export default function Conteudo() {
                                 </div>
         
                                 <div class="deletar">
-                                    <div class="icon-deletar"> <img src="./assets/images/delete.png" alt=""/> </div>
+                                    <div class="icon-deletar"> <img onClick={() => removerAluno(x.id_matricula)} src="./assets/images/delete.png" alt=""/> </div>
                                 </div>
                             </IconesTabela>
                         </tr>

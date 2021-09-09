@@ -1,6 +1,7 @@
 import { ContainerCabecalho, Icones, Perfil } from "./styled";
 
 export default function Cabecalho() {
+
     return (
         <ContainerCabecalho>
             <Perfil>
