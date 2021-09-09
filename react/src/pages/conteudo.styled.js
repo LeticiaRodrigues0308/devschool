@@ -13,7 +13,7 @@ const ConteudoSite = styled.div`
     color: white;
 
     width: 360px;
-    height: 1180px;
+    height: auto;
 }
 
 .cabecalho-b1 {
@@ -70,7 +70,7 @@ const ConteudoSite = styled.div`
 }
 
 .box-aluno {
-    width:  90%;
+    width:  91%;
     height: 250px;
 
     margin: 2em 0em 0em 4em;
@@ -124,7 +124,7 @@ const ConteudoSite = styled.div`
     margin-left: 4em;
 }
 
-button {
+.botao-cadastrar button {
     width: 106px;
     height: 36px;
     margin-left: 3em;
@@ -139,8 +139,13 @@ button {
     cursor: pointer;
 }
 
+.botao-cadastrar button:hover {
+        background-color: #aa3997;
+        transition: 2s;
+    }
+
 .box-matriculados {
-    width: 90%;
+    width: 93%;
     height: auto;
 
     margin: 2em 4em;
@@ -168,9 +173,9 @@ button {
 }
 
 td{
-    padding: 20px 0px 20px 30px;
-
+    padding: 1em;
     font-size: 18px;
+    text-align: left;
 }
 
 th {
@@ -187,6 +192,13 @@ table tr:nth-child(odd){
 
 table tr:nth-child(even) {
     background-color: #FFFFFF;
+}
+
+td button {
+    border-radius: 40px;
+    border: 0px;
+    background-color: #565656;
+    cursor: pointer;
 }
 `
 

@@ -6,8 +6,8 @@ const TabelaMatriculados = styled.table`
     color: #FFFFFF;
 }
 
-    width: 900px;
-    margin-left: 5em;
+    width: auto;
+    margin-left: 2em;
 
     border-left: 1px solid #E2E2E2;
     border-right: 1px solid #E2E2E2;
@@ -19,7 +19,6 @@ const TabelaMatriculados = styled.table`
 const IconesTabela = styled.table`
         display: flex;
         flex-direction: row;
-        margin-top: 15px;
     
 
     .editar img {

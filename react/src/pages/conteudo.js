@@ -3,14 +3,69 @@ import { MatriculaInput } from "../components/outros/inputs"
 import { ConteudoSite } from "./conteudo.styled"
 import { IconesTabela, TabelaMatriculados } from "../components/outros/table"
 
-import Api from '../../service/api';
+import { useState, useEffect } from "react"
+
+import Api from "../service/api"
 const api = new Api();
 
 export default function Conteudo() {
 
-    const removerAluno = async (id) => {
-        const r = await api.apagarMatricula(id);
+    const [matriculas, setMatriculas] = useState([]);
+    const [nome, setNome] = useState('');
+    const [chamada, setChamada] = useState('');
+    const [turma, setTurma] = useState('');
+    const [curso, setCurso] = useState('');
+    const [idAlterando, setIdAlterando] = useState(0);
+
+    async function listarAlunos() {
+        let r = await api.listarAlunos();
+        console.log(r);
+        setMatriculas(r)
     }
+
+    async function inserirAluno() {
+
+        if(idAlterando == 0) {
+            let r = await api.inserirAluno(nome, chamada, curso, turma);
+            alert('Aluno inserido com sucesso!');
+        } else {
+            let r = await api.alterarMatricula(idAlterando, nome, chamada, curso, turma);
+            alert('Aluno alterado com sucesso!');
+        }
+
+        limparCampos();
+        listarAlunos()
+    }
+
+    function limparCampos(){
+        setNome('');
+        setChamada('');
+        setCurso('');
+        setTurma('');
+        setIdAlterando(0);
+    }
+
+    async function removerMatricula(id) {
+        let r = await api.removerMatricula(id);
+        alert('Aluno removido com sucesso!');
+
+        listarAlunos();
+    }
+
+    async function alterarMatricula(item) {
+        setNome(item.nm_aluno);
+        setChamada(item.nr_chamada);
+        setCurso(item.nm_curso);
+        setTurma(item.nm_turma);
+        setIdAlterando(item.id_matricula);
+    }
+
+
+    // chamada apenas 1 vez, quando a tela abre
+    useEffect(() => {
+        listarAlunos();
+    }, [])
+
 
     return (
         <ConteudoSite>
@@ -44,26 +99,26 @@ export default function Conteudo() {
                 <div class="inputs1">
                     <div class="input-nome">
                         <div class="label">Nome:</div>
-                        <MatriculaInput/>
+                        <MatriculaInput type="text" value={nome} onChange={e => setNome(e.target.value)}/>
                     </div>
 
                     <div class="input-curso">
                         <div class="label">Curso:</div>
-                        <MatriculaInput/>
+                        <MatriculaInput type="text" value={curso} onChange={e => setCurso(e.target.value)}/>
                     </div>
                 </div>
 
                 <div class="inputs2">
                     <div class="input-chamada">
                         <div class="label">Chamada:</div>
-                        <MatriculaInput/>
+                        <MatriculaInput type="text" value={chamada} onChange={e => setChamada(e.target.value)}/>
                     </div>
 
                     <div class="input-turma">
                         <div class="label">Turma:</div>
-                        <MatriculaInput/>
+                        <MatriculaInput type="text" value={turma} onChange={e => setTurma(e.target.value)}/>
                     </div>
-                    <div class="botao-cadastrar"> <button>Cadastrar</button> </div>
+                    <div class="botao-cadastrar"> <button onClick={inserirAluno}>Cadastrar</button> </div>
                 </div>
             </div>
 
@@ -85,77 +140,26 @@ export default function Conteudo() {
                                 <th></th>
                             </tr>
                         </thead>
-                        <tr>
-                            <td>1</td>
-                            <td>Fulao da Silva Sauro</td>
-                            <td>14</td>
-                            <td>InfoX</td>
-                            <td>Informática</td>
 
-                            <IconesTabela>
-                                <div class="editar">
-                                    <div class="icon-editar"> <img src="./assets/images/edit.png" alt=""/> </div>
-                                </div>
-        
-                                <div class="deletar">
-                                    <div class="icon-deletar"> <img onClick={() => removerAluno(x.id_matricula)} src="./assets/images/delete.png" alt=""/> </div>
-                                </div>
-                            </IconesTabela>
-                        </tr>
+                        <tbody>
 
-                        <tr>
-                            <td>2</td>
-                            <td>Fulao da Silva Sauro</td>
-                            <td>15</td>
-                            <td>InfoX</td>
-                            <td>Informática</td>
+                            {matriculas.map(item =>
 
-                            <IconesTabela>
-                            <div class="editar">
-                                    <div class="icon-editar"> <img src="./assets/images/edit.png" alt=""/> </div>
-                                </div>
-        
-                                <div class="deletar">
-                                    <div class="icon-deletar"> <img src="./assets/images/delete.png" alt=""/> </div>
-                                </div>
-                            </IconesTabela>
-                        </tr>
+                                <tr>
+                                    <td>{item.id_matricula}</td>
+                                    <td>{item.nm_aluno}</td>
+                                    <td>{item.nr_chamada}</td>
+                                    <td>{item.nm_curso}</td>
+                                    <td>{item.nm_turma}</td>
 
-                        <tr>
-                            <td>3</td>
-                            <td>Fulao da Silva Sauro</td>
-                            <td>16</td>
-                            <td>InfoX</td>
-                            <td>Informática</td>
-                            <td></td>
-                        </tr>
+                                    <IconesTabela>
+                                        <td> <button onClick={() => alterarMatricula(item)} > <img src="./assets/images/edit.png" alt=""/> </button> </td>
+                                        <td> <button onClick={() => removerMatricula(item.id_matricula)} > <img src="./assets/images/delete.png" alt=""/> </button> </td>
+                                    </IconesTabela>
+                                </tr>
+                            )}
 
-                        <tr>
-                            <td>4</td>
-                            <td>Fulao da Silva Sauro</td>
-                            <td>17</td>
-                            <td>InfoX</td>
-                            <td>Informática</td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td>5</td>
-                            <td>Fulao da Silva Sauro</td>
-                            <td>18</td>
-                            <td>InfoX</td>
-                            <td>Informática</td>
-                            <td></td>
-                        </tr>
-
-                        <tr>
-                            <td>6</td>
-                            <td>Fulao da Silva Sauro</td>
-                            <td>19</td>
-                            <td>InfoX</td>
-                            <td>Informática</td>
-                            <td></td>
-                        </tr>
+                        </tbody>
                         </TabelaMatriculados>
                 </div>
             </div>
