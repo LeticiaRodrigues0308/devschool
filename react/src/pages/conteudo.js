@@ -3,7 +3,12 @@ import { MatriculaInput } from "../components/outros/inputs"
 import { ConteudoSite } from "./conteudo.styled"
 import { IconesTabela, TabelaMatriculados } from "../components/outros/table"
 
-import { useState, useEffect } from "react"
+import LoadingBar from 'react-top-loading-bar'
+
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { useState, useEffect, useRef } from "react"
 
 import Api from "../service/api"
 const api = new Api();
@@ -17,24 +22,35 @@ export default function Conteudo() {
     const [curso, setCurso] = useState('');
     const [idAlterando, setIdAlterando] = useState(0);
 
+    const loading = useRef(null);
+
     async function listarAlunos() {
+
         let r = await api.listarAlunos();
-        console.log(r);
         setMatriculas(r)
     }
 
     async function inserirAluno() {
+        loading.current.complete();
 
         if(idAlterando == 0) {
             let r = await api.inserirAluno(nome, chamada, curso, turma);
-            alert('Aluno inserido com sucesso!');
+
+            if(r.erro)
+                toast.error(r.erro);
+            else
+                toast.success('Aluno inserido com sucesso!');
         } else {
             let r = await api.alterarMatricula(idAlterando, nome, chamada, curso, turma);
-            alert('Aluno alterado com sucesso!');
+
+            if(r.erro)
+                toast.error(r.erro);
+            else
+                toast.success('Aluno alterado com sucesso!');
         }
 
         limparCampos();
-        listarAlunos()
+        listarAlunos();
     }
 
     function limparCampos(){
@@ -46,13 +62,17 @@ export default function Conteudo() {
     }
 
     async function removerMatricula(id) {
+        loading.current.complete();
+
         let r = await api.removerMatricula(id);
-        alert('Aluno removido com sucesso!');
+        toast.success('🗑️ Aluno removido com sucesso!');
 
         listarAlunos();
     }
 
-    async function alterarMatricula(item) {
+    async function alterar(item) {
+        loading.current.complete();
+
         setNome(item.nm_aluno);
         setChamada(item.nr_chamada);
         setCurso(item.nm_curso);
@@ -69,6 +89,8 @@ export default function Conteudo() {
 
     return (
         <ConteudoSite>
+            <ToastContainer/>
+            <LoadingBar color='#DB21BD' ref={loading}/>
             <div class="container">
             <div class="box1">
             <div class="cabecalho-b1">
@@ -93,7 +115,7 @@ export default function Conteudo() {
             <div class="box-aluno">
                 <div class="alu">
                     <div class="linha2"> <img src="./assets/images/linha1.png" alt=""/> </div>
-                    <div class="novo-aluno">Novo Aluno</div>
+                    <div class="novo-aluno"> {idAlterando == 0 ? "Novo Aluno" : "Alterando Aluno " + idAlterando}</div>
                 </div>
 
                 <div class="inputs1">
@@ -118,7 +140,7 @@ export default function Conteudo() {
                         <div class="label">Turma:</div>
                         <MatriculaInput type="text" value={turma} onChange={e => setTurma(e.target.value)}/>
                     </div>
-                    <div class="botao-cadastrar"> <button onClick={inserirAluno}>Cadastrar</button> </div>
+                    <div class="botao-cadastrar"> <button onClick={inserirAluno}>  {idAlterando == 0 ? "Cadastrar" : "Alterar"}</button></div>
                 </div>
             </div>
 
@@ -153,8 +175,8 @@ export default function Conteudo() {
                                     <td>{item.nm_turma}</td>
 
                                     <IconesTabela>
-                                        <td> <button onClick={() => alterarMatricula(item)} > <img src="./assets/images/edit.png" alt=""/> </button> </td>
-                                        <td> <button onClick={() => removerMatricula(item.id_matricula)} > <img src="./assets/images/delete.png" alt=""/> </button> </td>
+                                        <td className="acao"> <button onClick={() => alterar(item)} > <img src="./assets/images/edit.png" alt=""/> </button> </td>
+                                        <td className="acao"> <button onClick={() => removerMatricula(item.id_matricula)} > <img src="./assets/images/delete.png" alt=""/> </button> </td>
                                     </IconesTabela>
                                 </tr>
                             )}

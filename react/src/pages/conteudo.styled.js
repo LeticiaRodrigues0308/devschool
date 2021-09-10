@@ -13,7 +13,10 @@ const ConteudoSite = styled.div`
     color: white;
 
     width: 360px;
-    height: auto;
+    height: 100vh;
+
+    position: sticky;
+    top: 0px;
 }
 
 .cabecalho-b1 {
@@ -44,7 +47,7 @@ const ConteudoSite = styled.div`
 .alunos {
     display: flex;
     flex-direction: row;
-    width: 360px;
+    width: 16em;
     height: 24px;
     padding: 1em 0em 1em 4em;
 
@@ -199,6 +202,18 @@ td button {
     border: 0px;
     background-color: #565656;
     cursor: pointer;
+}
+
+tr:hover {
+
+    .acao > button {
+    visibility: visible;
+}
+
+}
+
+.acao > button {
+    visibility: hidden;
 }
 `
 
