@@ -8,6 +8,9 @@ import LoadingBar from 'react-top-loading-bar'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+import {confirmAlert} from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 import { useState, useEffect, useRef } from "react"
 
 import Api from "../service/api"
@@ -30,23 +33,28 @@ export default function Conteudo() {
         setMatriculas(r)
     }
 
-    async function inserirAluno() {
+    async function cadastrarAluno() {
         loading.current.complete();
 
         if(idAlterando == 0) {
             let r = await api.inserirAluno(nome, chamada, curso, turma);
 
-            if(r.erro)
+            if(r.erro){
                 toast.error(r.erro);
-            else
+            }
+            else {
                 toast.success('Aluno inserido com sucesso!');
+            }
         } else {
             let r = await api.alterarMatricula(idAlterando, nome, chamada, curso, turma);
+            console.log(r);
 
-            if(r.erro)
+            if(r.erro) {
                 toast.error(r.erro);
-            else
+            }
+            else {
                 toast.success('Aluno alterado com sucesso!');
+            }
         }
 
         limparCampos();
@@ -64,10 +72,27 @@ export default function Conteudo() {
     async function removerMatricula(id) {
         loading.current.complete();
 
-        let r = await api.removerMatricula(id);
-        toast.success('🗑️ Aluno removido com sucesso!');
-
-        listarAlunos();
+        confirmAlert({
+            title: 'Remover aluno',
+            message: `Tem certeza que deseja remover o aluno ${id} ?`, 
+            buttons: [
+                {
+                    label: 'Sim',
+                    onClick: async () => {
+                        let r = await api.removerMatricula(id);
+                        if(r.erro)
+                            toast.error(`${r.erro}`);
+                        else {
+                            toast.success('🗑️ Aluno removido com sucesso!');
+                            listarAlunos();
+                        }
+                    }
+                },
+                {
+                    label: 'Não'
+                }
+            ]
+        });
     }
 
     async function alterar(item) {
@@ -121,7 +146,7 @@ export default function Conteudo() {
                 <div class="inputs1">
                     <div class="input-nome">
                         <div class="label">Nome:</div>
-                        <MatriculaInput type="text" value={nome} onChange={e => setNome(e.target.value)}/>
+                        <MatriculaInput type="text" required value={nome} onChange={e => setNome(e.target.value)}/>
                     </div>
 
                     <div class="input-curso">
@@ -133,14 +158,14 @@ export default function Conteudo() {
                 <div class="inputs2">
                     <div class="input-chamada">
                         <div class="label">Chamada:</div>
-                        <MatriculaInput type="text" value={chamada} onChange={e => setChamada(e.target.value)}/>
+                        <MatriculaInput type="text" value={chamada} onChange={e => setChamada(e.target.value)} required/>
                     </div>
 
                     <div class="input-turma">
                         <div class="label">Turma:</div>
                         <MatriculaInput type="text" value={turma} onChange={e => setTurma(e.target.value)}/>
                     </div>
-                    <div class="botao-cadastrar"> <button onClick={inserirAluno}>  {idAlterando == 0 ? "Cadastrar" : "Alterar"}</button></div>
+                    <div class="botao-cadastrar"> <button onClick={cadastrarAluno}>  {idAlterando == 0 ? "Cadastrar" : "Alterar"}</button></div>
                 </div>
             </div>
 
@@ -169,7 +194,11 @@ export default function Conteudo() {
 
                                 <tr>
                                     <td>{item.id_matricula}</td>
-                                    <td>{item.nm_aluno}</td>
+                                    <td title={item.nm_aluno}>
+                                            {item.nm_aluno != null && item.nm_aluno.length >= 25 
+                                                ? item.nm_aluno.substring(0, 25) + '...' 
+                                                : item.nm_aluno}
+                                    </td>
                                     <td>{item.nr_chamada}</td>
                                     <td>{item.nm_curso}</td>
                                     <td>{item.nm_turma}</td>

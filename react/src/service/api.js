@@ -16,7 +16,7 @@ export default class Api {
     }
 
     async alterarMatricula(id, nome, chamada, curso, turma) {
-        let r = await api.put('/matricula' + id, {nome, chamada, curso, turma});
+        let r = await api.put('/matricula/' + id, {nome, chamada, curso, turma});
         return r.data;
     }
 

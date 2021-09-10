@@ -6,8 +6,8 @@ const TabelaMatriculados = styled.table`
     color: #FFFFFF;
 }
 
-    width: auto;
-    margin-left: 2em;
+    width: 80%;
+    margin-left: 4em;
 
     border-left: 1px solid #E2E2E2;
     border-right: 1px solid #E2E2E2;
