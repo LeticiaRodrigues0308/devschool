@@ -217,40 +217,4 @@ tr:hover {
 }
 `
 
-const Icones = styled.div`
-    .bolinhas {
-    display: flex;
-    flex-direction: row;
-    margin-left: 70em;
-}
-
-    .box-carregar {
-        display: flex;
-        align-items: center;
-        width: 45px;
-        height: 45px;
-        border-radius: 50px;
-
-        background-color: #986CDF;
-    }
-
-    .box-sair {
-        display: flex;
-        align-items: center;
-        width: 45px;
-        height: 45px;
-        border-radius: 50px;
-
-        background-color: #986CDF;
-    }
-
-    .box-carregar {
-        margin-right: 0.5em;
-    }
-
-    .carregar, .sair {
-        padding-left: 10px;
-    }
-`
-
-export {ConteudoSite, Icones}
+export {ConteudoSite}
