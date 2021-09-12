@@ -71,7 +71,7 @@ const Icones = styled.div`
 const ContainerCabecalho = styled.div`
     display: flex;
     flex-direction: row;
-    width: 100%;
+    width: auto;
 
     padding: 2em;
     background-color: #FFFFFF;
