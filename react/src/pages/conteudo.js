@@ -28,6 +28,7 @@ export default function Conteudo() {
     const loading = useRef(null);
 
     async function listarAlunos() {
+        loading.current.complete();
 
         let r = await api.listarAlunos();
         setMatriculas(r)
