@@ -201,8 +201,8 @@ export default function Conteudo() {
                                                 : item.nm_aluno}
                                     </td>
                                     <td>{item.nr_chamada}</td>
-                                    <td>{item.nm_curso}</td>
                                     <td>{item.nm_turma}</td>
+                                    <td>{item.nm_curso}</td>
 
                                     <IconesTabela>
                                         <td className="acao"> <button onClick={() => alterar(item)} > <img src="./assets/images/edit.png" alt=""/> </button> </td>
