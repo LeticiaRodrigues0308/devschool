@@ -183,7 +183,7 @@ td{
 
 th {
     text-align: left;
-    padding-left: 30px;
+    padding-left: 20px;
     font-size: 18px;
 
     background-color: #986CDF;
