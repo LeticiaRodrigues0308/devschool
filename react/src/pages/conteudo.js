@@ -37,7 +37,7 @@ export default function Conteudo() {
     async function cadastrarAluno() {
         loading.current.complete();
 
-        if(idAlterando == 0) {
+        if(idAlterando === 0) {
             let r = await api.inserirAluno(nome, chamada, curso, turma);
 
             if(r.erro){
@@ -141,7 +141,7 @@ export default function Conteudo() {
             <div class="box-aluno">
                 <div class="alu">
                     <div class="linha2"> <img src="./assets/images/linha1.png" alt=""/> </div>
-                    <div class="novo-aluno"> {idAlterando == 0 ? "Novo Aluno" : "Alterando Aluno " + idAlterando}</div>
+                    <div class="novo-aluno"> {idAlterando === 0 ? "Novo Aluno" : "Alterando Aluno " + idAlterando}</div>
                 </div>
 
                 <div class="inputs1">
@@ -166,7 +166,7 @@ export default function Conteudo() {
                         <div class="label">Turma:</div>
                         <MatriculaInput type="text" value={turma} onChange={e => setTurma(e.target.value)}/>
                     </div>
-                    <div class="botao-cadastrar"> <button onClick={cadastrarAluno}>  {idAlterando == 0 ? "Cadastrar" : "Alterar"}</button></div>
+                    <div class="botao-cadastrar"> <button onClick={cadastrarAluno}>  {idAlterando === 0 ? "Cadastrar" : "Alterar"}</button></div>
                 </div>
             </div>
 
